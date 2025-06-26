@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+   {% block body %}
+   <link rel="stylesheet" href="static/register.css">
+<br><br><br><br><br>
+    <div class="registration-container">
+        <h2>Register as Waiter</h2><br>
+        <form action="/register" method="POST"> <!-- Change action URL based on your route -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <input type="hidden" id="user_type" name="user_type" value="waiter" >
+            <div class="form-group">
+                <label for="email">owner_id:</label>
+                <input type="number" id="owner_id" name="owner_id" required>
+            </div>
+                 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <div style="color:red;">
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }} mt-3">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endwith %}
+
+            <div class="form-group">
+                <button type="submit">Create Account</button>
+            </div>
+        
+            <div class="form-group">
+                <p>Already have an account? <a href="/waiter_login">Login here</a></p>
+            </div>
+        </form>
+        
+        
+        <script>
+          
+        </script>
+        
+    </div>
+
+   
+{% endblock %}

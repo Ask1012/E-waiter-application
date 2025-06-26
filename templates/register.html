@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+   {% block body %}
+   <link rel="stylesheet" href="static/register.css">
+<br><br><br><br><br><br>
+    <div class="registration-container">
+        <h2>Create Account</h2>
+        <form action="/register" method="POST"> <!-- Change action URL based on your route -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" minlength="5" maxlength="12" pattern=".{5,12}" required title="Password must be between 1 and 12 characters">
+
+            </div>
+        
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address (e.g., example@domain.com)">
+            </div>
+        
+            <div class="form-group">
+                <label for="user_type">Register as:</label>
+                <select id="user_type" name="user_type" required>
+                    <option value="" disabled selected>Select user type</option>
+                    <option value="owner">Owner</option>
+                    <option value="user">User</option>
+                </select>
+            </div>
+        
+            <!-- Hidden field for owner_id -->
+            <input type="hidden" id="owner_id" name="owner_id" value="{{owner_id}}"> <!-- 2 is the owner_id that you want to submit -->
+        
+            <div class="form-group">
+                <button type="submit">Create Account</button>
+            </div>
+        
+            <div class="form-group">
+                <p>Already have an account? <a href="/owner_login">Login here</a></p>
+            </div>
+        </form>
+        
+        
+        <script>
+            // Show/hide the owner_id input field based on user type
+            document.getElementById('user_type').addEventListener('change', function () {
+                const ownerIdGroup = document.getElementById('owner-id-group');
+                if (this.value === 'user') {
+                    ownerIdGroup.style.display = 'block';
+                    document.getElementById('owner_id').setAttribute('required', 'required');
+                } else {
+                    ownerIdGroup.style.display = 'none';
+                    document.getElementById('owner_id').removeAttribute('required');
+                }
+            });
+        </script>
+        
+    </div>
+
+   
+{% endblock %}

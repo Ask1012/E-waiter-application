@@ -1,0 +1,32 @@
+.registration-container {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 60%;
+}
+.form-group {
+    margin-bottom: 15px;
+    width: 110%;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+input {
+    width: 80%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+button {
+    width: 80%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}

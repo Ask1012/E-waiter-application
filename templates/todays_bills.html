@@ -1,0 +1,253 @@
+{% extends "layout.html" %}
+{% block body %}
+    <style>
+       
+        /* Styling for printing on small printers */
+        @media print {
+            body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            }
+            .bill-section {
+            width: 58mm; /* Adjust width for 58mm thermal paper */
+            margin: 0 auto;
+            padding: 5mm;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            }
+            .bill-details {
+            box-shadow: none;
+            border-radius: 0;
+            background: #fff;
+            }
+            .bill-details table {
+            width: 100%;
+            border-collapse: collapse;
+            }
+            .bill-details th, .bill-details td {
+            padding: 5px;
+            font-size: 10px;
+            text-align: left;
+            }
+            .bill-total {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 10px;
+            }
+            .print-btn {
+            display: none;
+            }
+        }
+
+        /* General Bill Section Styles */
+        .bill-section {
+            position: relative;
+            left: 0;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 150px;
+        }
+        .bill-details {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .print-btn {
+            background-color: rgb(54, 54, 204);
+            padding: 4px 20px;
+            color: white;
+            border-radius: 5px;
+            border: none;
+        }
+        .bill-details h3, .bill-details h4 {
+            margin: 10px 0;
+            color: #333;
+            border-bottom: 1px solid grey;
+        }
+        .bill-details p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+        .bill-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .bill-details ul li {
+            margin: 10px 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .bill-details ul li strong {
+            font-size: 16px;
+            color: #333;
+        }
+        .bill-total {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #e74c3c;
+            text-align: right;
+        }
+        /* Chart Section */
+        #orderChart {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 30px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .bill-section {
+            width: 80%;
+            max-width: 80%;
+            padding: 5px;
+            }
+            .bill-details {
+            padding: 8px;
+            }
+            .bill-details h3, .bill-details h4 {
+            font-size: 16px;
+            }
+            .bill-details p,
+            .bill-details th,
+            .bill-details td {
+            font-size: 12px;
+            }
+            .bill-total {
+            font-size: 14px;
+            }
+            #orderChart {
+            width: 100%;
+            max-width: 100%;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .bill-section {
+            width: 60%;
+            max-width: 700px;
+            }
+        }
+    </style>
+
+<br><br><br><br><br><br>
+<h1>Today's Bills</h1>
+{% if bills %}
+<div class="bill-section">
+    {% for bill in bills %} 
+        <div class="bill-details" id="bill-{{ bill.bill_id }}">
+            <h3>Bill ID: {{ bill.bill_id }}</h3>
+            <p>Table ID: {{ bill.table_id }}</p>
+            <p>Waiter ID: {{ bill.waiter_id }}</p>
+            <p>Date: {{ bill.bill_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+            <h4>Bill Details:</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Item Name</th>
+                        <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Quantity</th>
+                        <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Price</th>
+                        <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in bill.details %}
+                    <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ item.item_name }}</td>
+                        <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ item.quantity }}</td>
+                        <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ "%.2f"|format(item.price) }}</td>
+                        <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ "%.2f"|format(item.price * item.quantity) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <p class="bill-total">Total Amount: {{ "%.2f"|format(bill.total_amount) }}</p>
+            <button class="print-btn" onclick="printBill({{ bill.bill_id }})">Print</button>
+        </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<p>No bills found for today.</p>
+{% endif %}
+
+    <script>
+        function printBill(billId) {
+    // Select the specific bill by ID
+    const billDiv = document.getElementById(`bill-${billId}`);
+    if (!billDiv) {
+        alert(`Error: No bill found with ID: bill-${billId}`);
+        return;
+    }
+
+    // Clone the bill content for printing
+    const billContent = billDiv.outerHTML;
+
+    // Create a new printable HTML document
+    const printableContent = `
+        <html>
+        <head>
+            <title>Print Bill</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                }
+                .bill-section {
+                    width: 100%;
+                    margin: 0 auto;
+                }
+                .bill-details {
+                    border: 1px solid #ccc;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                }
+                h3, h4 {
+                    margin: 10px 0;
+                }
+                ul {
+                    list-style-type: none;
+                    padding: 0;
+                }
+                ul li {
+                    margin-bottom: 5px;
+                }
+                .bill-total {
+                    font-weight: bold;
+                    color: #e74c3c;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="bill-section">
+                ${billContent}
+            </div>
+        </body>
+        </html>
+    `;
+
+    // Open a new window for printing
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(printableContent);
+    printWindow.document.close();
+
+    // Trigger the print dialog
+    printWindow.onload = () => {
+        printWindow.print();
+        printWindow.close(); // Close the window after printing
+    };
+}
+
+    </script>
+    
+
+{% endblock %}

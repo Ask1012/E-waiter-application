@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+   {% block body %}
+
+    <style>
+        
+        body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+ 
+main {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px;
+    flex-wrap: wrap;
+}
+section {
+    width: 30%;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    
+    
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.bill-section {
+    background: #f9f9f9;
+    margin-bottom: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 95%;
+}
+
+.bill-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+        @keyframes blinker {
+            50% {
+                position: relative;
+                top: -20px;
+                opacity: 0;
+            }
+        }
+        #audio1{
+            background-color:cyan;
+            display:flex;
+        }
+    </style>
+</head>
+<body>
+    <br><br><br><br><br>
+   <audio id="audio1" src="static/order.mp3" controls autoplay></audio>
+    <h1 class="offers blink">Hurry up, foodies are Huuuuungry!</h1>
+
+    <main>
+        <section id="new-orders">
+            <h2>New Orders</h2>
+            <div id="new-orders-list"></div>
+        </section>
+
+        <section id="proceeded-orders">
+            <h2>Proceeded Orders</h2>
+            <div id="proceeded-orders-list"></div>
+        </section>
+
+        <section id="dispatched-orders">
+            <h2>Dispatched Orders</h2>
+            <div id="dispatched-orders-list"></div>
+        </section>
+    </main>
+
+    <audio id="new-order-sound" src="static/order.mp3" preload="auto"></audio>
+
+    <script>
+       
+    </script>
+{% endblock %}

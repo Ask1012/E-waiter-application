@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+   {% block body %}
+<style>
+.container {
+    width: 78%;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 20%;
+    top:20%;
+}
+
+/* Header styling */
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #4CAF50;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1.1rem;
+}
+
+td {
+    background-color: #f9f9f9;
+    font-size: 1rem;
+}
+
+tr:nth-child(even) td {
+    background-color: #f1f1f1;
+}
+
+/* Links and buttons */
+a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d32f2f;
+}
+
+/* Action buttons and links */
+td a, td button {
+    margin-right: 10px;
+}
+
+/* Form styling */
+form {
+    display: inline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 80%;
+    }
+
+    table {
+        width: 65%;
+        font-size: 0.9rem;
+    }
+   
+    th ,td {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+ </style>  <br><br><br><br><br><br><br><br>
+   <br><br><br><br><br><br><br><br>
+ <div class="container">
+  
+    <h1>Manage Waiters</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Sr.no</th>
+                <th>Waiter Name</th>
+                <th>Billing Rate</th>
+                <th>Daily Bill</th>
+                <th>Weekly Bill</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for waiter in waiters %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ waiter.waiter_name }}</td>
+                <td>{{ waiter.billing_rate if waiter.billing_rate else "N/A" }}</td>
+                <td>
+                    <a href="">
+                        View Daily Bill
+                    </a>
+                </td>
+                <td>
+                    <a href="">
+                        View Weekly Bill
+                    </a>
+                </td>
+                <td>
+                    <form action="{{ url_for('remove_waiter', waiter_id=waiter.waiter_id) }}" method="POST">
+                        <button type="submit">Remove Waiter</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    {% endblock %}

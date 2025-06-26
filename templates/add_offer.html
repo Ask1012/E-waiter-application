@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+{% block body %}
+<style>
+    /* Container for the form */
+    .container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 70%;
+        position: relative;
+        left: 10%;
+    }
+    
+    /* Styling for form elements */
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    input[type="text"],
+    input[type="number"] {
+        width: 80%;
+        padding: 10px 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        background-color: #f9f9f9;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        outline: none;
+    }
+    
+    .button {
+        width: 70%;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .button:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Styling the search results */
+    #results {
+        margin-top: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 5px;
+        width: 80%;
+    }
+    
+    #results ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    
+    #results li {
+        padding: 10px;
+        font-size: 16px;
+        color: #333;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid #e6e6e6;
+    }
+    
+    #results li:last-child {
+        border-bottom: none;
+    }
+    
+    #results li:hover {
+        background-color: #f0f8ff;
+        color: #0056b3;
+    }
+    
+    /* Styling for selected item */
+    #selected-item-group {
+        margin-top: 10px;
+    }
+    
+    #selected-item {
+        background-color: #e9ecef;
+        color: #495057;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 15px;
+        font-size: 16px;
+        pointer-events: none;
+    }
+    </style>
+    
+<br><br><br><br><br>
+<div class="container">
+    <h1>Add Discount Offer</h1>
+    <form action="/add_offer" method="POST">
+        
+        <div class="form-group">
+            <label for="search">Search Item:</label>
+            <input type="text" id="search" name="search" placeholder="Enter item name..." oninput="searchItems()">
+            <div id="results" style="margin-top: 10px;"></div>
+        </div>
+        
+        <div class="form-group" style="display: none;" id="selected-item-group">
+            <label for="selected-item">Selected Item:</label>
+            <input type="text" id="selected-item" name="item_name" readonly>
+            <input type="hidden" id="selected-item-id" name="item">
+        </div>
+        
+        <div class="form-group">
+            <label for="discount">Discount Percentage:</label>
+            <div class="input-wrapper">
+                <input type="number" id="discount" name="discount" min="1" max="100" placeholder="Enter discount" required>
+                <span class="input-suffix">%</span>
+            </div>
+        </div>
+        
+        <button class="button" type="submit">Apply Discount</button>
+         </form>
+
+    {% if get_flashed_messages() %}
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endwith %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    function searchItems() {
+        const query = document.getElementById("search").value;
+        const resultsDiv = document.getElementById("results");
+        const selectedItemGroup = document.getElementById("selected-item-group");
+
+        // Clear previous results and hide selected item group
+        resultsDiv.innerHTML = '';
+        selectedItemGroup.style.display = "none";
+
+        if (!query) return; // Don't search if query is empty
+
+        // Perform the search
+        fetch(`/search_items?query=${encodeURIComponent(query)}`)
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.items.length === 0) {
+                    resultsDiv.innerHTML = '<p>No items found</p>';
+                    return;
+                }
+
+                const list = document.createElement("ul");
+                data.items.forEach((item) => {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = item.item_name;
+                    listItem.style.cursor = "pointer";
+                    listItem.addEventListener("click", () => selectItem(item));
+                    list.appendChild(listItem);
+                });
+                resultsDiv.appendChild(list);
+            })
+            .catch((error) => {
+                console.error("Error searching items:", error);
+            });
+    }
+
+    function selectItem(item) {
+        // Populate selected item details
+        document.getElementById("selected-item").value = item.item_name;
+        document.getElementById("selected-item-id").value = item.item_id;
+
+        // Hide results and show selected item group
+        document.getElementById("results").innerHTML = '';
+        document.getElementById("selected-item-group").style.display = "block";
+    }
+</script>
+
+{% endblock %}

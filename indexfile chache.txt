@@ -1,0 +1,31 @@
+ <h1>Items</h1>
+            <ul>
+                {% for item in items %}
+                    <li>{{ item.item_name }} - ${{ item.price }} (Category: {{ item.category }})</li>
+                {% endfor %}
+            </ul>
+            <div id="menuContainer">
+                {% for category, items in items_by_category.items() %}
+                    <section id="category-{{ loop.index }}" class="hanging-page lazy-bg" data-bg="f2.jpg">
+                        <h2>◾{{ category }}</h2>
+                        <div class="menu-list">
+                            {% for item in items %}
+                                <div class="item-row">
+                                    <div class="color-block" style="background-color: lightblue;"></div>
+                                    <span class="item-name">{{ item.item_name }}</span>
+                                    <span class="item-price">${{ item.price }}</span>
+                                    <span class="item-quantity">Quantity:</span>
+                                    <select class="quantity-selector">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                    </select>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>

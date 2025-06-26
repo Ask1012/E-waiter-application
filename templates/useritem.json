@@ -1,0 +1,64 @@
+[
+  {
+    "name": "Sandwich",
+    "price": 80,
+    "color": "#d8bfd8",
+    "category": "FastFood"
+  },
+  {
+    "name": "Pizza",
+    "price": 120,
+    "color": "#f0e68c",
+    "category": "FastFood"
+  },
+  {
+    "name": "Ff",
+    "price": 8,
+    "color": "#000000",
+    "category": "FastFood"
+  },
+  {
+    "name": "Chat",
+    "price": 50,
+    "color": "#000000",
+    "category": "Snacks"
+  },
+  {
+    "name": "Pizza ",
+    "price": 89,
+    "color": "#000000",
+    "category": "Snacks"
+  },
+  {
+    "name": "Pista",
+    "price": 50,
+    "color": "#ffff00",
+    "category": "Snacks"
+  },
+  
+  {
+    "name": "Banana",
+    "price": 20,
+    "color": "#000000",
+    "category": "Other"
+  },
+  {
+    "name": "Idali",
+    "price": 40,
+    "color": "#ffffff",
+    "category": "Fast Food"
+  },
+  {
+    "name": "Saber vada",
+    "price": 30,
+    "color": "#000000",
+    "category": "Snacks"
+  },
+  {
+    "name": "dabeli",
+    "price": 20,
+    "color": "#683f3f",
+    "category": "Snacks"
+  }
+  
+]

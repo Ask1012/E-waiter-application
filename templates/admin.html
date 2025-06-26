@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Menu Items</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h3>Add New Menu Menu</h3>
+    <form id="addItemForm">
+        <label for="itemName">Item Name:</label>
+        <input type="text" id="itemName" required><br>
+        <label for="itemPrice">Price:</label>
+        <input type="number" id="itemPrice" required><br>
+        <label for="itemColor">Color:</label>
+        <input type="color" id="itemColor" required><br>
+        <label for="itemCategory">Category:</label>
+        <select id="itemCategory" required>
+            <option value="Fast Food">Fast Food</option>
+            <option value="Snacks">Snacks</option>
+            <option value="Other">Other</option>
+        </select><br>
+        <button type="submit">Add Item</button>
+    </form>
+    <script>
+        document.getElementById('addItemForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const newItem = {
+                name: document.getElementById('itemName').value,
+                price: parseFloat(document.getElementById('itemPrice').value),
+                color: document.getElementById('itemColor').value,
+                category: document.getElementById('itemCategory').value
+            };
+
+            fetch('/add-item', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newItem)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Item added successfully!');
+                    document.getElementById('addItemForm').reset();
+                } else {
+                    alert('Error adding item.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

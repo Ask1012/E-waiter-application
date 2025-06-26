@@ -1,0 +1,169 @@
+{% extends "layout.html" %}
+   {% block body %} 
+   <style>
+
+    .container {
+        width:70%;
+        position: absolute;
+        left: 20%;
+        top: 20%;
+        background-color: white;
+        padding: 10px;
+    }
+    /* General Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Table Headers */
+th {
+    background-color: #007bff; /* Professional blue background */
+    color: white; /* White text for contrast */
+    font-weight: bold; /* Bold text */
+    padding: 10px; /* Adequate padding for spacing */
+    text-align: left; /* Align text to the left */
+    text-transform: uppercase; /* Make header text uppercase */
+    border: 1px solid #ddd; /* Subtle border for separation */
+    font-family: Arial, sans-serif; /* Professional font */
+    letter-spacing: 0.5px; /* Slight letter spacing for better readability */
+}
+
+/* Table Cells */
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+/* Zebra Stripe Effect for Table Rows */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Form Styles */
+form {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Input Fields */
+input[type="text"], input[type="date"], button {
+    padding: 10px;
+    margin: 5px 0;
+    width: 100%;
+    max-width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Add a Responsive Layout */
+@media (max-width: 768px) {
+    input[type="text"], input[type="date"], button {
+        max-width: 100%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>View Bills</h1>
+    <form id="filter-form">
+        <label for="bill-id">Bill ID:</label>
+        <input type="text" id="bill-id" placeholder="Enter Bill ID">
+        <h2> OR</h2>
+        <label for="bill-date">Bill Date:</label>
+        <input type="date" id="bill-date">
+
+        <button type="button" onclick="fetchBills()">Search</button>
+    </form>
+
+    <div id="bills-container"></div>
+</div>
+    <script>
+       const ownerId = {{ current_user.owner_id }};
+
+        function fetchBills() {
+            const billId = document.getElementById('bill-id').value;
+            const billDate = document.getElementById('bill-date').value;
+
+            let url = `/view_bills?owner_id=${ownerId}`;
+            if (billId) url += `&bill_id=${billId}`;
+            if (billDate) url += `&bill_date=${billDate}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('bills-container');
+                    container.innerHTML = '';
+
+                    if (data.length === 0) {
+                        container.innerHTML = '<p>No bills found.</p>';
+                        return;
+                    }
+
+                    data.forEach(bill => {
+                        const billDiv = document.createElement('div');
+                        billDiv.innerHTML = `
+                            <h2>Bill ID: ${bill.bill_id}</h2>
+                            <p>Table ID: ${bill.table_id}</p>
+                            <p>Waiter ID: ${bill.waiter_id}</p>
+                            <p>Total Amount: ${bill.total_amount.toFixed(2)}</p>
+                            <p>Bill Date: ${bill.bill_date}</p>
+                            <h3>Ordered Items:</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${bill.details.map(item => `
+                                        <tr>
+                                            <td>${item.item_name}</td>
+                                            <td>${item.price}</td>
+                                            <td>${item.quantity}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                        container.appendChild(billDiv);
+                    });
+                })
+                .catch(error => console.error('Error fetching bills:', error));
+        }
+    </script>
+{% endblock %}
