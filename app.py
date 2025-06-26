@@ -28,9 +28,6 @@ app.config['SESSION_PERMANENT'] = False  # Session expires when the browser is c
 app.config['MAIL_USERNAME'] = 'ak1074834@gmail.com'
 app.config['MAIL_PASSWORD'] = '/ask.in/kumbhar'
 YOUR_DOMAIN = "http://localhost:5000"
-***REMOVED***
-
-***REMOVED***
 
 UPLOAD_FOLDER = 'static/uploads/'  # Folder to store uploaded photos
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
