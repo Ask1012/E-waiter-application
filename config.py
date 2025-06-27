@@ -3,7 +3,12 @@ from datetime import timedelta
 
 class Config:
     SECRET_KEY = 'ask'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/hotel'
+    SQLALCHEMY_DATABASE_URI = (
+    f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
+    f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    f"?ssl_ca=certs/isrgrootx1.pem"
+)
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
     SESSION_COOKIE_SECURE = True
