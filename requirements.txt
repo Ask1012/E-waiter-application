@@ -7,3 +7,4 @@ qrcode
 flask-mail
 Flask-Bcrypt
 pymysql
+stripe
