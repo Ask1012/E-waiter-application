@@ -8,7 +8,7 @@ class Config:
     f"@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
     f"?ssl_ca=certs/isrgrootx1.pem"
 )
-
+    STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
     SESSION_COOKIE_SECURE = True
