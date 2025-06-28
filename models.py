@@ -155,7 +155,7 @@ class Contact(db.Model):
 
 class Subscription(db.Model):
     __tablename__ = 'subscriptions'
-    subscription_id = db.Column(db.Integer, primary_key=True)
+    subscription_id = db.Column(db.String(36), primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('hotel_owners.owner_id', ondelete='CASCADE'), nullable=False)
     owner_name = db.Column(db.String(255), nullable=False)  
     owner_email = db.Column(db.String(255), nullable=False, unique=True)  
