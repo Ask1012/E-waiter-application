@@ -8,8 +8,5 @@ flask-mail
 Flask-Bcrypt
 pymysql
 stripe
-
-pellow
-
 Pillow
 pytz
