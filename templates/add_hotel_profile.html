@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+   {% block body %}
+   <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+
+<br><br><br><br><br><br><br><br><br><br>
+<div class="container">
+    <h2>Hotel Profile</h2>
+    <form method="POST" action="{{ url_for('add_hotel_profile') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="hotel_name">Hotel Name:</label>
+            <input type="text" id="hotel_name" name="hotel_name" class="form-control" 
+                   value="{{ profile.hotel_name }}" required>
+        </div>
+
+        <h2> Owner Id :{{owner_id}} <h4>share it to Waiters for registeration </h4></h2><br>
+        <div class="form-group">
+            <label for="number_of_tables">Number of Tables:</label>
+            <input type="number" id="number_of_tables" name="number_of_tables" class="form-control" 
+                   value="{{ profile.number_of_tables }}" min="1" required>
+        </div>
+        <div class="form-group">
+            <label for="hotel_photo">Hotel Photo:</label>
+            {% if profile.hotel_photo %}
+                <p>Current Photo:</p>
+                <img src="{{ url_for('static', filename=profile.hotel_photo.split('static/')[1]) }}" 
+                     alt="Hotel Photo" style="width: 150px; height: auto;">
+            {% endif %}
+            <input type="file" id="hotel_photo" name="hotel_photo" class="form-control">
+        </div>
+
+        <!-- New Field for Time Zone Selection -->
+        <div class="form-group">
+            <label for="timezone">Select Hotel Time Zone:</label>
+            <select id="timezone" name="timezone" class="form-control">
+                <option value="UTC" {% if profile.timezone == 'UTC' %}selected{% endif %}>UTC</option>
+                <option value="Asia/Kolkata" {% if profile.timezone == 'Asia/Kolkata' %}selected{% endif %}>Asia/Kolkata (IST)</option>
+                <option value="America/New_York" {% if profile.timezone == 'America/New_York' %}selected{% endif %}>America/New_York (EST)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+</div>
+
+    {% endblock %}

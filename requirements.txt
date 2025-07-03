@@ -1,0 +1,12 @@
+Flask
+Flask-Login
+Flask-SQLAlchemy
+itsdangerous
+bcrypt
+qrcode
+flask-mail
+Flask-Bcrypt
+pymysql
+stripe
+pellow
+pytz

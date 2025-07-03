@@ -1,0 +1,195 @@
+{% extends "layout.html" %}
+   {% block body %}
+<style>
+/* css for add product */
+
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 10px;
+}
+
+.form-group input, .form-group select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid cyan;
+    border-radius: 4px;
+width:60%;
+height:50%;
+}
+
+.add-btn[type="submit"] {
+     width: 50%;
+    padding: 10px 20px; 
+    background-color: lightblue;
+    border-radius:10px;
+   }
+.item-list-section{
+width:100%;
+}
+
+
+thead,tbody,tr,th,td{
+margin: 0 auto;
+padding: 10px 20px;
+width:100%;
+height: 10%;
+border: 1px solid grey;
+font-size: 1rem;
+}
+
+
+.edit-btn{
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 8px;
+    background-color:rgb(88, 177, 93);
+    margin-bottom: -50px;
+    color:white;
+}
+ .delete-btn{
+    padding: 5px;  
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color:red;
+    color:white;
+}
+
+@media(min-width:600px)
+{
+.container {
+font-size:25px;
+padding:70px;
+align-items:center;
+}
+
+.btn[type="submit"] {
+width:50%;
+}
+
+tr,th,td {
+font-size:25px;
+
+padding: 10px 10px;
+}
+
+}
+
+
+</style>
+    <br><br><br><br><br><br>
+    <div class="container">
+        <!-- Top Section: Add New Item -->
+        <section class="add-item-section">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div style="color:red;">
+                      {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mt-3">
+                          {{ message }}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+            <h1>Add New Item</h1>
+            <form id="addItemForm"  action="/add_item" method="post">
+                <div class="form-group">
+                    <label for="itemName">Item Name:</label>
+                    <input type="text" id="itemName" name="itemName" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemPrice">Price:</label>
+                    <input type="number" id="itemPrice" name="itemPrice" min="1" required>
+                </div>
+                
+                
+            <div class="form-group">
+                <label for="itemCategory" class="form-label">Item Category</label>
+                <select class="form-select" id="itemCategory" name="itemCategory">
+                    <option value="" selected disabled>Select a category</option>
+                    {% for category in items_by_category.keys() %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="customCategory" class="form-label">Or Add a Custom Category</label>
+                <input type="text" class="form-control" id="customCategory" name="customCategory" placeholder="Enter custom category">
+            </div>
+                
+                <button class="add-btn" type="submit">Add Item</button><br><br>
+            </form>
+            
+        </section>
+      </div>
+        <br> <br>   <div class="container"><!-- Below Section: List of Items -->
+            {% if current_user.is_authenticated and current_user.is_Wwner and not current_user.is_Owner %}  
+            <section class="item-list-section">
+                <h1>Item List</h1>
+                <table id="itemListTable">
+                    <thead>
+                        <tr>
+                            <th style="width:20%;">ID</th>
+                            <th>Name</th>
+                            <th style="width:30%;">Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for  item in  items %}
+                        <tr data-item-id="{{ item.item_id }}">
+                            <td style="width:20%;">{{ loop.index }}</td>
+                            <td>
+                                <span class="view-mode">{{ item.item_name }}</span>
+                                <input class="edit-mode form-control" type="text" name="item_name" value="{{ item.item_name }}" style="display:none;">
+                            </td>
+                            <td style="width:30%;">
+                                <span class="view-mode">{{ item.price }}</span>
+                                <input class="edit-mode form-control" type="text" name="item_price" value="{{ item.price }}" style="display:none;">
+                            </td>
+                            <td>
+                                <form action="/edit_item/{{ item.item_id }}" method="GET" style="display:inline;">
+                                    <button class="btn btn-primary edit-btn view-mode">Edit</button>
+                                    </form>
+                                    <form action="/delete_item/{{ item.item_id }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger delete-btn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+            {% endif %}
+           
+    
+</div>
+<script>
+     
+</script>
+{% endblock %}

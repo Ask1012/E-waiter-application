@@ -1,0 +1,255 @@
+{% extends "layout.html" %}
+   {% block body %}
+    <style>
+        /* Basic reset to remove default margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the form */
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        /* Styling the heading */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .face {
+            display: flex; /* Flexbox for easy alignment */
+            flex-direction: column; /* Arrange items vertically */
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 80px;
+            border: 2px solid black;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .leye, .reye {
+            width: 20px;
+            height: 20px;
+            background-color: black;
+            border-radius: 50px;
+            position: absolute; /* Position absolutely for specific placement */
+        }
+
+        .leye {
+            left: 25px; /* Position the left eye */
+            top: 30px;
+        }
+
+        .reye {
+            right: 25px; /* Position the right eye */
+            top: 30px;
+        }
+
+        /* Adding white dots (pupils) inside the eyes using ::before */
+        .leye::before, .reye::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px; /* Adjust the position of the white dot */
+            left: 3px; /* Adjust the position of the white dot */
+        }
+
+        .mouth {
+            width: 50px;
+            height: 50px; /* Make the height equal to width to form a full circle */
+            border: 5px solid tomato; /* Thickness of the arc */
+            border-radius: 50%; /* Make it a perfect circle */
+            border-color: transparent transparent tomato transparent; /* Hide all borders except the bottom */
+            position: absolute;
+            bottom: 20px;
+            left: 24px; /* Position the mouth */
+        }
+
+        /* Styling for the form elements */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="password"],
+        input[type="text"] {
+            width: calc(100% - 50px); /* Adjust for button */
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Change border color on focus */
+        input[type="password"], input[type="text"]:focus {
+            border-color: #66afe9;
+            outline: none;
+        }
+
+        /* Styling for the submit button */
+        button {
+            justify-content: left;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Change button color on hover */
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* Hide pupils when the 'hide-pupils' class is added */
+        .hide-pupils .leye::before, .hide-pupils .reye::before {
+            display: none;
+        }
+
+        /* Styling for the toggle password visibility button */
+        .toggle-password {
+            display: inline-block;
+            padding: 10px;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            margin-left: 5px;
+            font-size: 16px;
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Change button color on hover */
+        .toggle-password:hover {
+            background-color: #e9ecef;
+        }
+    </style>
+
+    
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div class="container">
+        <h1>User Login</h1>
+        
+        <form action="/user_login" method="POST">  <!-- Change to lowercase 'login' -->
+            <div class="form-group">
+                <label for="email">Email</label>  <!-- Change 'name' to 'username' -->
+                <input type="text" id="email" name="email" required>        
+            </div>
+        
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper" style="display: flex; align-items: center;">
+                    <input type="password" id="password" name="password" minlength="1" maxlength="12" required>
+                    <button type="button" class="toggle-password" id="toggle-password">
+                        <!-- Eye SVG for showing password -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24">
+                            <path stroke="currentColor" stroke-width="2" d="M12 4.5c-7.5 0-11.5 7.5-11.5 7.5S4.5 19.5 12 19.5s11.5-7.5 11.5-7.5S19.5 4.5 12 4.5z"/>
+                            <path stroke="currentColor" stroke-width="2" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"/>
+                            <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <div style="color:red;">
+                      {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mt-3">
+                          {{ message }}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+              </div>
+            <button type="submit">Login</button>
+            
+    
+            <div class="form-group">
+                <p>Don't have an account  <a href="{{url_for('register',owner_id=owner_id)}}">Create new </a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const passwordInput = document.getElementById('password');
+        const faceElement = document.getElementById('face');
+        const togglePassword = document.getElementById('toggle-password');
+
+        // Function to hide pupils by adding a class to the face element
+        function hidePupils() {
+            faceElement.classList.add('hide-pupils');
+        }
+
+        // Function to show pupils by removing the class
+        function showPupils() {
+            faceElement.classList.remove('hide-pupils');
+        }
+
+        // Event listeners for focus and blur
+        passwordInput.addEventListener('focus', hidePupils);
+        passwordInput.addEventListener('blur', showPupils);
+
+        // Event listener for toggle password visibility
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Change the SVG based on the visibility state
+            if (type === 'password') {
+                this.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24">
+                        <path stroke="currentColor" stroke-width="2" d="M12 4.5c-7.5 0-11.5 7.5-11.5 7.5S4.5 19.5 12 19.5s11.5-7.5 11.5-7.5S19.5 4.5 12 4.5z</path>
+                    <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                    </svg>
+                `;
+            } else {
+                this.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" width="24" height="24">
+                        <path stroke="currentColor" stroke-width="2" d="M12 4.5c-7.5 0-11.5 7.5-11.5 7.5S4.5 19.5 12 19.5s11.5-7.5 11.5-7.5S19.5 4.5 12 4.5z"/>
+                        <path stroke="currentColor" stroke-width="2" d="M12 17.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11z"/>
+                        <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                        <path stroke="currentColor" stroke-width="2" d="M3 3l18 18"/>
+                    </svg>
+                `;
+            }
+        });
+    </script>
+{% endblock %}

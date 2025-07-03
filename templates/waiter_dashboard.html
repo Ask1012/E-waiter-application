@@ -1,0 +1,537 @@
+{% extends "layout.html" %}
+   {% block body %}
+   <style>
+ .container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+    gap: 20px; /* Adds spacing between sections */
+}
+
+.table-section,
+.category-section {
+    flex: 0.45;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensure content stays within the box */
+    width: 110%;
+}
+
+.table-section {
+    display: flex;
+    flex-direction: column; /* Ensure items stack vertically */
+    align-items: flex-start;
+    overflow-y: auto; /* Vertical scrolling */
+    height: 60vh; /* Dynamic height relative to viewport */
+    margin-right: 20px;
+    scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+.category-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto; /* Vertical scrolling */
+    height: 60vh;
+    scroll-behavior: smooth; /* Smooth scrolling */
+    gap: 5px ; /* Adds spacing between category items */
+}
+
+
+ h2 {
+    margin-bottom: 15px;
+    font-size:1rem;
+   
+    color: #333;
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 5px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slightly raises the button */
+}
+
+.scroll-container {
+    overflow-y: auto; /* Enables vertical scrolling */
+    height: calc(100% - 20px); /* Accounts for padding or margins */
+    padding-right: 10px; /* Adds spacing for scrollbar */
+}
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px; /* Custom scrollbar width */
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #ccc; /* Custom scrollbar color */
+    border-radius: 4px; /* Rounded edges */
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa; /* Darker color on hover */
+}
+
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add an active (clicked) state */
+        .button.selected {
+            border:2px solid rgb(0, 0, 0);
+            color:blue; /* Slightly shrink the button */
+            background-color: #ffffff; /* Darker blue for visual feedback */
+        }
+       
+        .menu-popup {
+    position: fixed;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; 
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 80%;
+    max-height: 70%;
+    display: none;
+    overflow-x: auto;  
+    overflow-y: auto; 
+    scroll-behavior: smooth;
+     
+}
+
+
+        .menu-popup h2 {
+            margin-top: 0;
+        }
+        span{
+            padding-right: 5px;
+            max-width: 70px;
+        }
+        .close-popup {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .bill-section {
+            position: absolute;
+            top: 300px;
+            right: 20px;
+            width: 300px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none; /* Hide the bill section initially */
+        }
+
+        .bill-section h3 {
+            margin: 0;
+            padding: 10px;
+            background-color: #343a40;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bill-section .close-bill {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            
+        }
+        
+        .bill-content {
+            padding: 10px;
+        }
+
+        .bill-buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+        }
+
+        select {
+            margin-left: 5px;
+        }
+        .bill-section{
+            position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; 
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    width: 80%;
+    max-height: 70%;
+    display: none;
+       /* Enable horizontal and vertical scrolling when needed */
+       overflow-x: auto;  /* Horizontal scrollbar if content overflows */
+    overflow-y: auto;  /* Vertical scrollbar if content overflows */
+    
+    /* Apply smooth scrolling for inbuilt scrollbar */
+    scroll-behavior: smooth;
+   
+        }
+        .view-bill-btn-container {
+            position: fixed;
+            bottom: 25px;
+            right: 20px;
+          
+        }
+
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 3px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+
+
+        
+    </style>
+</head>
+<body>
+   
+<br><br><br><br><br><br>
+    <div class="container">
+        <br><br><br><br><br><br>
+        <!-- Table Selection Section -->
+        <div>
+            <h2>Select Table</h2>
+            <div class="table-section">
+                     {% for i in range(1, table_count+1 ) %} <!-- Example: 10 tables -->
+                        <button class="button" data-table="Table {{ i }}">Table {{ i }}</button>
+                  
+                     {% endfor %}
+            </div>
+         </div>
+        
+        <!-- Category Section -->
+        <div>
+            <h2>Select Category</h2>
+            <div class="category-section">
+            {% if items_by_category %}
+            {% for category, items in items_by_category.items() %}
+            <button class="button category-btn" data-category="{{ category }}">{{ category }}</button>
+            {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Menu Popup -->
+ 
+   
+    <div class="menu-popup" id="menuPopup">
+        
+        <button class="close-popup" id="closePopup">X</button>
+        <h2 id="popupTitle">Menu</h2>
+        <div id="menuItems" >
+            <!-- Menu items dynamically loaded here -->
+         </div>
+    </div>
+
+    <!-- View Bill Button -->
+    <div class="view-bill-btn-container">
+        <button class="button" id="viewBillButton">View Bill</button>
+    </div>
+
+    <!-- Bill Section -->
+    <div class="bill-section" id="billSection">
+        <h3>Bill (Table: <span id="selectedTable">None</span>) <button class="close-bill" id="closeBill">X</button></h3>
+        <div class="bill-content" id="billContent"></div>
+        <div class="bill-buttons">
+            <button class="button" id="proceedButton">Proceed</button>
+            <button class="button" id="completeButton">Complete</button>
+        </div>
+    </div>
+
+ <script>
+    const tableButtons = document.querySelectorAll('.table-section .button');
+    const categoryButtons = document.querySelectorAll('.category-btn');
+    const menuPopup = document.getElementById('menuPopup');
+    const closePopup = document.getElementById('closePopup');
+    const menuItemsContainer = document.getElementById('menuItems');
+    const selectedTableSpan = document.getElementById('selectedTable');
+    const billContent = document.getElementById('billContent');
+    const proceedButton = document.getElementById('proceedButton');
+    const viewBillButton = document.getElementById('viewBillButton');
+    const completeButton = document.getElementById('completeButton');
+    const billSection = document.getElementById('billSection');
+    const closeBillButton = document.getElementById('closeBill');
+
+    let selectedTable = null;
+    const itemsByCategory = {{ items_by_category|tojson }}; // Dynamic data from the server
+
+    // Handle table selection
+    tableButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const tableId = button.textContent.trim().replace('Table ', '');
+            try {
+                const response = await fetch('/select_table', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        table_id: tableId,
+                        waiter_id: {{ waiter_id }},
+                        owner_id: {{ owner_id }}
+                    })
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message);
+                    selectedTable = tableId;
+                    selectedTableSpan.textContent = `Table ${selectedTable}`;
+                    button.classList.add('selected');
+                    tableButtons.forEach(btn => {
+                        if (btn.textContent.trim() !== `Table ${selectedTable}`) {
+                            btn.classList.remove('selected');
+                        }
+                    });
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Error selecting table:', error);
+                alert('Failed to select table.');
+            }
+        });
+    });
+
+    // Open menu popup for selected category
+    categoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (!selectedTable) {
+                alert('Please select a table first.');
+                return;
+            }
+
+            const category = button.getAttribute('data-category');
+            document.getElementById('popupTitle').textContent = `${category} Menu`;
+
+            const items = itemsByCategory[category] || [];
+            menuItemsContainer.innerHTML = items.map(item => `
+                <div class="menu-item">
+                    <span>${item.item_name}</span>
+                    <span>₹ ${item.price}</span>
+                    <select class="quantity-selector" data-name="${item.item_name}">
+                        ${[...Array(10).keys()].map(i => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                    </select>
+                    <button class="button add-btn" data-name="${item.item_name}" data-price="${item.price}">Add</button>
+                </div>
+            `).join('');
+
+            menuPopup.style.display = 'block';
+        });
+    });
+
+    // Close menu popup
+    closePopup.addEventListener('click', () => {
+        menuPopup.style.display = 'none';
+    });
+
+    // Add items to the bill
+    menuItemsContainer.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('add-btn')) {
+            const name = e.target.getAttribute('data-name');
+            const price = parseFloat(e.target.getAttribute('data-price'));
+            const quantity = parseInt(e.target.previousElementSibling.value);
+
+            try {
+                const response = await fetch('/add_menu_item', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        table_id: selectedTable,
+                        item_name: name,
+                        price: price,
+                        quantity: quantity
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Item added successfully.');
+                    updateBillContent(data.data);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('Error adding item:', error);
+                alert('Failed to add item.');
+            }
+        }
+    });
+
+    // View bill
+    viewBillButton.addEventListener('click', async () => {
+        if (!selectedTable) {
+            alert('Please select a table first.');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/view_bill?table_id=${selectedTable}&owner_id={{ owner_id }}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                updateBillContent(data.data,data.total);
+                billSection.style.display = 'block';
+                menuPopup.style.display = 'none';
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Error viewing bill:', error);
+            alert('Failed to fetch bill.');
+        } 
+    });
+
+    // Remove item from bill
+billContent.addEventListener('click', async (e) => {
+    if (e.target.classList.contains('remove-btn')) {
+        const name = e.target.getAttribute('data-name');
+
+        try {
+            const response = await fetch('/remove_menu_item', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    table_id: selectedTable,
+                    waiter_id: {{ waiter_id }},  // Make sure waiter_id is passed correctly
+                    owner_id: {{ owner_id }},
+                    item_name: name
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert('Item removed successfully.');
+                updateBillContent(data.data,data.total);  // Update the bill content dynamically after item removal
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Error removing item:', error);
+            alert('Failed to remove item.');
+        }
+    }
+});
+
+// Function to update the bill content dynamically
+function updateBillContent(billItems,total) {
+    billContent.innerHTML = '';  // Clear current bill content
+
+    if (Object.keys(billItems).length === 0) {
+        billContent.innerHTML = `<p>No items in the bill.</p>`;
+        return;
+    }
+
+    // Loop through each item in the bill and display it
+    billItems.forEach(item => {
+        billContent.innerHTML += `
+            <div class="menu-item">
+                <span>${item.item_name}</span>
+                <span>₹ ${item.price}</span>
+                <span>Quantity: ${item.quantity}</span>
+                <button class="button remove-btn" data-name="${item.item_name}">Remove</button>
+            </div>
+        `;
+    });
+    billContent.innerHTML += `<br> <span>Total ${total}: </span> `;
+}
+
+
+    // Complete bill with confirmation
+completeButton.addEventListener('click', async () => {
+    // Show confirmation dialog
+    const confirmComplete = confirm("Are you sure you want to complete the bill? This action cannot be undone.");
+
+    if (confirmComplete) {
+        try {
+            const response = await fetch('/complete_bill', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    table_id: selectedTable,
+                    owner_id: {{ owner_id }}
+                })
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                alert(data.message);
+
+                // Reset the UI after successful completion
+                selectedTable = null;
+                selectedTableSpan.textContent = 'None';
+                billSection.style.display = 'none';
+                tableButtons.forEach(btn => btn.classList.remove('selected'));
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Error completing bill:', error);
+            alert('Failed to complete bill.');
+        }
+    }
+});
+
+
+    // Close bill section
+    closeBillButton.addEventListener('click', () => {
+        billSection.style.display = 'none';
+    });
+</script>
+
+
+{% endblock %}

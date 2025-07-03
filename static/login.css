@@ -1,0 +1,96 @@
+.container {
+   
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+}
+
+/* Styling the heading */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+
+
+
+/* Styling for the form elements */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    
+    color: #333;
+}
+
+input[type="password"],
+input[type="text"] {
+    width: 80%; /* Adjust for button  width: calc(100% - 100px); */
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+/* Change border color on focus */
+input[type="password"], input[type="text"]:focus {
+    border-color: #66afe9;
+    outline: none;
+}
+
+/* Styling for the submit button */
+button {
+    justify-content: left;
+    width: 80%;
+    padding: 10px 20px;
+    font-size: 0.90rem;
+    color: #fff;
+    background-color: #28a745;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: background-color 0.3s ease;
+}
+
+/* Change button color on hover */
+button:hover {
+    background-color: #218838;
+}
+
+/* Hide pupils when the 'hide-pupils' class is added */
+.hide-pupils .leye::before, .hide-pupils .reye::before {
+    display: none;
+}
+
+/* Styling for the toggle password visibility button */
+.toggle-password {
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    margin-left: 5px;
+    font-size: 16px;
+    color: #333;
+    transition: background-color 0.3s ease;
+    width: 10%;
+}
+
+/* Change button color on hover */
+.toggle-password:hover {
+    background-color: #e9ecef;
+}
+p {
+    font-size: 1rem;
+}

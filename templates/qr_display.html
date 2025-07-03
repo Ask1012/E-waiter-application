@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Admin Panel</title>
+    <link rel="stylesheet" href="static/admin-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+</head>
+
+    <style>
+        /* General Reset and Font Styling */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            color: #333;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5rem;
+            animation: fadeInDown 1s ease-in-out;
+        }
+        a { 
+            text-decoration: none;
+            color: inherit;
+        }
+        /* Button Styling */
+        button {
+            font-size: 1rem;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, background 0.3s;
+        }
+        button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+        /* QR Code Styling */
+        img {
+            margin-top: 20px;
+            border: 5px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            animation: bounceIn 1.2s ease-in-out;
+        }
+        /* Link Styling */
+        a:hover {
+            text-decoration: underline;
+        }
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 0.9;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+    <body>
+<div>
+    <h1>QR Code for your hotel </h1>
+    
+    
+
+    <!-- Display the QR Code -->
+    <img src="data:image/png;base64,{{ qr_base64 }}" alt="QR Code for Registration" style="width: 300px; height: 300px;">
+
+    <br><br>
+
+    <!-- Download QR Code -->
+    <a href="data:image/png;base64,{{ qr_base64 }}" download="owner_{{ owner_id }}_qr_code.png">
+        <button>Download QR Code</button>
+    </a><br><br>
+    <a href="{{ url_for('hotel', owner_id = owner_id) }}">Link for Hotel</a>
+</div>
+</body>
+</html>

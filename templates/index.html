@@ -1,0 +1,166 @@
+{% extends "layout.html" %}
+
+{% block body %} <!-- Main Content -->
+<main>
+    <br><br><br>
+    <h1>Welcome to Your Admin Dashboard, {{ current_user.owner_name }}</h1>
+
+    {% if current_user.is_authenticated and current_user.is_owner %}
+        {% if current_user.subscription_status == 'trial' or current_user.subscription_status == 'active' %}
+            <div>
+                <h1 style="position: absolute; left: 300px;">Welcome to Your Admin Dashboard, {{ current_user.owner_name }}</h1>
+
+                {% if current_user.subscription_status == 'trial' %}
+                    <p style="color: orange; font: 100; position: relative; left:40%; top:320px;">
+                        You are currently on a free trial. Your trial will expire Soon  <s> 
+                        <strong>{{trial_days_remaining}}</strong> 
+                    </p>
+                {% endif %}
+
+                <!-- Dashboard content for trial or active users -->
+                <div class="homebody">
+                    <section class="stats-section">
+                        <div class="stat-box">
+                            <h2>Today's Bills</h2>
+                            <h3 id="totalOrders">{{ todays_bills }}</h3>
+                        </div>
+                        <div class="stat-box">
+                            <h2>Today's Income</h2>
+                            <h3 id="totalIncome">{{ total_amount }} Rs</h3>
+                        </div>
+                        <div class="stat-box">
+                            <h2>Most Ordered Products</h2>
+                            <h3 id="totalOrders"> {{  most_ordered_product}}</h3>
+                        </div>
+                    </section>
+
+                    <!-- Chart Section -->
+                    <br><br>
+                    <h2 style="text-align: center; border: 2px solid white; background-color: lightskyblue; padding: 10px;">Today's Bills</h2>
+                    <div class="bill-container">
+                        {% for bill in bills %}
+                            <div class="bill-section stat-box">
+                                <h2 style="border-top: 1px solid #ccc;">Bill ID: {{ bill.bill_id }}</h2>
+                                <div class="bill-details">
+                                    <p><strong>Table Number: {{ bill.table_id }}</strong></p>
+                                    <p><strong>Waiter ID: {{ bill.waiter_id }}</strong></p>
+                                    <h4>Bill Details:</h4>
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align: left; border-bottom: 2px solid #ddd; padding: 8px;">Item Name</th>
+                                                <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Quantity</th>
+                                                <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Price</th>
+                                                <th style="text-align: right; border-bottom: 2px solid #ddd; padding: 8px;">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in bill.details %}
+                                                <tr>
+                                                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ item.item_name }}</td>
+                                                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ item.quantity }}</td>
+                                                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ "%.2f" | format(item.price) }}</td>
+                                                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #eee;">{{ "%.2f" | format(item.price * item.quantity) }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <canvas id="orderChart"></canvas>
+                </div>
+            </div>
+           
+        {% elif current_user.subscription_status == 'expired' %}
+            <div class="stat-box" style="position: absolute; left: 25%;">
+                
+                <h1>Subscription Expired</h1>
+                <h2 style="color: red;">
+                    Your free trial or subscription has expired. Please <a href="{{ url_for('payment_page') }}">make a payment</a> to continue using the service.
+                </h2>
+            </div>
+        {% endif %}
+    {% else %}
+        
+
+
+    <!-- About Section -->
+    <div class="about-container">
+        <section class="smart-waiter">
+            <div style="max-width: 1200px; margin:auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                
+                <!-- Image on the Left -->
+                <div class="about-image" style="flex: 1; min-width: 300px; text-align: center; padding: 20px;">
+                    <img src="{{ url_for('static', filename='waiter1.png') }}" alt="Smart Waiter Image" style="width: 100%; max-width: 400px; border-radius: 10px;">
+                </div>
+                
+                <!-- Text on the Right -->
+                <div id="what-is-smart-waiter" style="flex: 2; min-width: 300px; padding: 10px;">
+                    <h1 style="color: #2a4d69; font-size: 2.5rem; margin-bottom: 20px;">What is E-Waiter?</h1>
+                    <p style="color: #4f4f4f; font-size: 1.2rem; line-height: 1.8;">
+                        An E-Waiter is a concept that leverages IoT devices to streamline restaurant operations and improve customer service. By connecting various devices such as tablets, smartphones, sensors, and other smart gadgets, restaurants can create a network that enables seamless communication between staff members and customers.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-section">
+            <div class="about-content reverse">
+                <div class="about-text">
+                    <h2>Our Vision</h2>
+                    <p style="font-size: 1.2rem;">We envision a world where hotel management is seamless and efficient. Our mission is to empower hotels to enhance their guest experience through streamlined processes and cutting-edge technology.</p>
+                </div>
+                <div class="about-image">
+                    <img src="{{ url_for('static', filename='vision.jpg') }}" alt="Vision Image">
+                </div>
+            </div>
+
+            <div class="about-content reverse">
+                <div class="about-text">
+                    <h2>Who We Are</h2>
+                    <p style="font-size: 1.2rem;">We are a group of dedicated college students passionate about technology and innovation. This project is part of our final year coursework, developed using Python and MySQL. Our goal is to simplify hotel management through an intuitive platform that empowers owners to manage menus, offers, and waiter registrations seamlessly.</p>
+                </div>
+                <div class="about-image">
+                    <img src="{{ url_for('static', filename='team.png') }}" alt="Team Image">
+                </div>
+            </div>
+
+            <div class="about-values">
+                <h2>Our Core Values</h2>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <h3>Innovation</h3>
+                        <p>We strive to stay ahead by creating innovative solutions tailored to the needs of modern hotels.</p>
+                    </div>
+                    <div class="value-item">
+                        <h3>Reliability</h3>
+                        <p>We are committed to delivering robust, user-friendly, and dependable tools for hotel operations.</p>
+                    </div>
+                    <div class="value-item">
+                        <h3>Customer Focus</h3>
+                        <p>Your success is our success. We prioritize your needs and deliver solutions that exceed expectations.</p>
+                    </div>
+                </div>
+            </div>
+
+            <section class="benefit" id="smart-waiter" style="background-color: #f0f8ff; padding: 50px;">
+                <div id="benefits-smart-waiter" style="margin-bottom: 40px;">
+                    <h2 style="color: #2a4d69; font-size: 2rem; margin-bottom: 20px; text-align: center;">Benefits of Smart Waiter Technology</h2>
+                    <ul style="list-style-type: disc; padding-left: 40px; color: #4f4f4f; font-size: 1.2rem; line-height: 1.8;">
+                        <li><strong>Enhanced Customer Experience:</strong> Customers can place orders, request service, and provide feedback more efficiently, improving satisfaction and loyalty.</li>
+                        <li><strong>Mobile Ordering:</strong> Customers can use their smartphones or tablets to place orders, eliminating physical menus and reducing wait times.</li>
+                        <li><strong>Increased Efficiency:</strong> Automation of tasks like order processing, inventory management, and table turnover results in faster service and reduced waiting times.</li>
+                        <li><strong>Data-driven Insights:</strong> IoT devices collect valuable data on customer preferences, peak hours, and popular dishes, enabling better decision-making.</li>
+                        <li><strong>Cost Savings:</strong> Reduces labor costs and minimizes food waste through automation and inventory management.</li>
+                    </ul>
+                </div>
+            </section>
+        </section>
+    </div>
+    
+    {% endif %}
+
+</main>
+{% endblock %}
