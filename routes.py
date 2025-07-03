@@ -402,36 +402,35 @@ def register_routes(app):
 
             return render_template('waiter_dashboard.html', owner_id=owner_id, waiter_id=waiter_id, items_by_category=items_by_category, table_count=table_count)
 
+    
+
     @app.route('/hotel', methods=['GET', 'POST'])
     def hotel():  
         items_by_category = {}
         owner_name = "Unknown Owner"
-
-        if current_user.is_authenticated and isinstance(current_user, (User, Owner,Waiter)):
-            # Fetch the owner and items for authenticated users
-            
+    
+        if current_user.is_authenticated and isinstance(current_user, (User, Owner, Waiter)):
             owner = db.session.get(Owner, current_user.owner_id)
             items = Items.query.filter_by(owner_id=current_user.owner_id).all()
             owner_name = owner.owner_name if owner else "Unknown Owner"
         else:
-            # Fetch the owner and items for non-authenticated users
             owner_id = request.args.get('owner_id')
             if owner_id:
-                owner_id = serializer.loads(owner_id)  # Decode the owner ID
-                owner = db.session.get(Owner, owner_id)
-                items = Items.query.filter_by(owner_id=owner_id).all()
-                owner_name = owner.owner_name if owner else "Unknown Owner"
+                try:
+                    owner_id = serializer.loads(owner_id)
+                    owner = db.session.get(Owner, owner_id)
+                    items = Items.query.filter_by(owner_id=owner_id).all()
+                    owner_name = owner.owner_name if owner else "Unknown Owner"
+                except BadSignature:
+                    return render_template("error.html", title="Invalid Link", message="The link is corrupted or expired."), 400
             else:
-                items = []  # No owner ID provided, so no items to display
-
-        # Group items by category
+                items = []
+    
         for item in items:
-            if item.category not in items_by_category:
-                items_by_category[item.category] = []  # Initialize a new list for the category
-            items_by_category[item.category].append(item)  # Append item to the correct category
-
-        # Render the template
+            items_by_category.setdefault(item.category, []).append(item)
+    
         return render_template('hotel.html', owner=owner_name, items_by_category=items_by_category)
+
 
     @app.route('/add_hotel_profile', methods=['GET', 'POST'])
     @login_required
