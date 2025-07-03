@@ -16,5 +16,10 @@ except OperationalError as e:
         return render_template('error.html', message="Service not available"), 500
 
 if __name__ == "__main__":
+
       # Render provides PORT env variable
     app.run(debug=True)
+
+    port = int(os.environ.get("PORT", 5000))  # Render provides PORT env variable
+    app.run(host="0.0.0.0", port=port, debug=True)
+

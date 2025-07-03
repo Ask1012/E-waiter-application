@@ -662,9 +662,13 @@ def register_routes(app):
         if not isinstance(current_user, Owner) and not isinstance(current_user, Waiter) :
             return render_template('error.html', title="Access Denied", message="Only owners can perform this action."), 403# Generate QR Code data URL dynamically for the owner_id
         owner_id= current_user.owner_id
+<<<<<<< HEAD
         encrypted_owner_id = serializer.dumps(owner_id)
         qr_data = url_for('hotel', owner_id=encrypted_owner_id, _external=True)
 
+=======
+        qr_data = url_for('hotel', owner_id=owner_id, _external=True)
+>>>>>>> c9794fdc7807617373ce77e2d7ae6f9cefcac8a5
 
         # Generate QR Code image
         qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
