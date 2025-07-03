@@ -676,8 +676,8 @@ def register_routes(app):
         buffered = BytesIO()
         img.save(buffered, format="PNG")
         qr_base64 = base64.b64encode(buffered.getvalue()).decode()
-        owner_id = serializer.dumps(owner_id)
-        return render_template('qr_display.html', qr_base64=qr_base64, owner_id=owner_id)
+        en_owner_id = serializer.dumps(owner_id)
+        return render_template('qr_display.html', qr_base64=qr_base64, owner_id=en_owner_id)
 
     @app.route('/select_table', methods=['POST'])
     @login_required
