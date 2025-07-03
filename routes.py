@@ -665,6 +665,8 @@ def register_routes(app):
         encrypted_owner_id = serializer.dumps(owner_id)
         qr_data = url_for('hotel', owner_id=encrypted_owner_id, _external=True)
 
+
+
         # Generate QR Code image
         qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
         qr.add_data(qr_data)
