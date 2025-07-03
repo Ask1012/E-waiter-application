@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 
 class Config:
-    SECRET_KEY = 'ask'
+    SECRET_KEY =  os.getenv("SECRET_KEY", "dev-secret") 
     SQLALCHEMY_DATABASE_URI =  os.getenv('SQLALCHEMY_DATABASE_URI', 'mysql+pymysql://root:password@localhost:3306/hotel')
     SQLALCHEMY_DATABASE_URI = (
     f"mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}"
