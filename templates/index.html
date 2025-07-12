@@ -3,7 +3,7 @@
 {% block body %} <!-- Main Content -->
 <main>
     <br><br><br>
-    <h1>Welcome to Your Admin Dashboard, {{ current_user.owner_name }}</h1>
+    
 
     {% if current_user.is_authenticated and current_user.is_owner %}
         {% if current_user.subscription_status == 'trial' or current_user.subscription_status == 'active' %}
