@@ -20,7 +20,16 @@
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" title="Please enter a valid email address (e.g., example@domain.com)">
             </div>
-        
+                
+                 {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% set category, message = messages[0] %}
+    <div class="alert alert-{{ category }} mt-3" style="color:red;">
+      {{ message }}
+    </div>
+  {% endif %}
+{% endwith %} 
+            
             <div class="form-group">
                 <label for="user_type">Register as:</label>
                 <select id="user_type" name="user_type" required>

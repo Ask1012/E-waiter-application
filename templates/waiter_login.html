@@ -27,17 +27,14 @@
                 </div>
             </div>
             <div>
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                  {% if messages %}
-                    <div style="color:red;">
-                      {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} mt-3">
-                          {{ message }}
-                        </div>
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-                {% endwith %}
+                  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% set category, message = messages[0] %}
+    <div class="alert alert-{{ category }} mt-3" style="color:red;">
+      {{ message }}
+    </div>
+  {% endif %}
+{% endwith %}
               </div>
             <button type="submit">Login</button>
             
